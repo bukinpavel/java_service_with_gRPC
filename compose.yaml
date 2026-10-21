@@ -1,0 +1,22 @@
+services:
+  orderService:
+    image: demo1-order-service
+    build: .
+    environment:
+      APP_ROLE: order-service
+      SPRING_MAIN_WEB_APPLICATION_TYPE: none
+      GRPC_SERVER_PORT: 9090
+    ports:
+      - "9090:9090"
+
+  demo-service:
+    image: demo1-client-service
+    build: .
+    depends_on:
+      - orderService
+    environment:
+      APP_ROLE: client
+      ORDER_SERVICE_HOST: orderService
+      ORDER_SERVICE_PORT: 9090
+    ports:
+      - "8080:8080"
